@@ -1,4 +1,4 @@
-# hackathon_wildfires
+# Hackathon - Wildfires
 
 api.R contains a function called check_wildfires that takes lat and lon as inputs, and returns: 
 + the severity of the user's situation based on proximity to fire

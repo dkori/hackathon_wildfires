@@ -24,5 +24,5 @@ current_fires<-read_sf(unzip("wildfire_Perimeters-shp.zip",files="Public_NIFS_Pe
 
 
 rest <- plumb("api.R")
-rest$run(port=8010)
+rest$run(port=8011)
 

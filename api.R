@@ -77,8 +77,35 @@ check_wildfires<-function(lat,lon,return_map_image=FALSE){
       select(geometry)%>%
       unlist()
     result= list("severity" = fire_match$severity,
-                 "tts" = fire_match$tts,
-                 "fire_geography" = fire_geo_info)
+                 "tts" = fire_match$tts#,
+                 #"fire_geography" = fire_geo_info
+                 )
   }
+  
+  if(return_map_image==TRUE# & fire_match$severity<4
+     ){
+    leaflet_map<-leaflet()%>%
+      setView(lng=lon,lat,zoom=8)%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(data=current_fires%>%
+                    filter(fire_id == fire_match$fire_id)%>%
+                    st_transform(crs="+init=EPSG:4326"),
+                  stroke=FALSE,
+                  fillColor = "red",
+                  fillOpacity=.7)%>%
+      addCircleMarkers(data=user_spatial,
+                       stroke=FALSE,
+                       fillColor="green",
+                       fillOpacity=1,
+                       radius=8)
+    # save the map
+    htmlwidgets::saveWidget(leaflet_map,"leaflet_map.html")
+    # read the map in as text
+    fileName <- 'leaflet_map.html'
+    leaflet_map_text<-readChar(fileName, file.info(fileName)$size)
+    
+    result[["map"]]<-leaflet_map_text
+  }
+  
   return(result)
 }

@@ -1,5 +1,24 @@
-# api.R 
-#* @get /add
+# api.R
+library(plumber)
+library(sf)
+library(httr)
+library(dplyr)
+library(leaflet)
+library(tigris)
+ca_shapefile<-states(cb=TRUE)%>%
+  filter(NAME == "California")%>%
+  st_transform("+init=EPSG:4326")
+# current_fires<-read_sf(unzip("wildfire_Perimeters-shp.zip",files="Public_NIFS_Perimeters.shp"),
+#                        crs="+init=EPSG:4326")%>%
+current_fires<-read_sf("Public_NIFS_Perimeters.shp",
+                       crs="+init=EPSG:4326")%>%
+  st_join(ca_shapefile,
+          left=FALSE)%>%
+  st_make_valid()%>%
+  select(geometry)%>%
+  slice(1:30)%>%
+  # create an ID column for each wildfire
+  mutate(fire_id = n())#* @get /add
 add <- function(x, y){
   return(as.numeric(x) + as.numeric(y))
 }#* @get /add2
@@ -24,26 +43,26 @@ check_wildfires<-function(lat,lon,return_map_image=FALSE){
     st_buffer(dist=16000)%>%
     mutate(severity=1,
            tts = "You are in a high risk location by the wildfire. The wildfire is with 10 miles of your location. Evacuate immediately and follow the directions provided in the County evacuation order.")
-  
+
   buffer_zones[["sev2"]]<-user_spatial%>%
     st_transform(crs="+init=EPSG:2163")%>%
     st_buffer(dist=48000)%>%
     mutate(severity=2,
            tts = "Evacuate as soon as possible or leave if you feel unsafe. Sensitive groups to air quality might want avoid prolonged or heavy exertion outside. Check your County social media for evacuation warnings and evacuation orders.")
-  
+
   buffer_zones[["sev3"]]<-user_spatial%>%
     st_transform(crs="+init=EPSG:2163")%>%
     st_buffer(dist=80000)%>%
     mutate(severity=3,
            tts = "Sensitive groups to air quality might want avoid prolonged or heavy exertion outside. Have you evacuation kit prepared if you feel unsafe or an evacuation warning is issued. Check your County social media for updates.")
-  
+
   # combine the buffer zones into a dataframe
   buffer_zone_frame<-buffer_zones%>%
     lapply(as.data.frame)%>%
     bind_rows()%>%
     st_as_sf(crs="+init=EPSG:2163")
-  
-  
+
+
   # join the buffer zones with the california wildfire data
   fire_match<-buffer_zone_frame%>%
     # try to join with wildfires
@@ -51,7 +70,7 @@ check_wildfires<-function(lat,lon,return_map_image=FALSE){
             left=FALSE)%>%
     # make a normal dataframe, we don't need spacial data either
     as.data.frame()
-  
+
   # check if fire_match has 0 rows, which would indicate sev 4
   if(nrow(fire_match)==0){
     fire_match<-data.frame(severity=4,
@@ -63,7 +82,7 @@ check_wildfires<-function(lat,lon,return_map_image=FALSE){
       # just keep the first row
       slice(1)
   }
-  
+
   # write results to a list
   if(fire_match$severity==4){
     result = list("severity" = 4,
@@ -81,7 +100,7 @@ check_wildfires<-function(lat,lon,return_map_image=FALSE){
                  #"fire_geography" = fire_geo_info
                  )
   }
-  
+
   if(return_map_image==TRUE# & fire_match$severity<4
      ){
     leaflet_map<-leaflet()%>%
@@ -103,9 +122,8 @@ check_wildfires<-function(lat,lon,return_map_image=FALSE){
     # read the map in as text
     fileName <- 'leaflet_map.html'
     leaflet_map_text<-readChar(fileName, file.info(fileName)$size)
-    
+
     result[["map"]]<-leaflet_map_text
   }
-  
   return(result)
 }

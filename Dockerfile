@@ -24,15 +24,36 @@ RUN apt-get update \
     protobuf-compiler \
     sqlite3 \
     tk-dev \
-    unixodbc-dev
+    unixodbc-dev \
+    wget\
+    cabal-install \
+    imagemagick \
+    librsvg2-bin \
+    librsvg2-common \
+    zlib1g \
+    pandoc 
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+    && mkdir /tmp/phantomjs \
+    && curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+           | tar -xj --strip-components=1 -C /tmp/phantomjs \
+    && cd /tmp/phantomjs \
+    && mv bin/phantomjs /usr/local/bin \
+    && cd \
+    && apt-get purge --auto-remove -y \
+        curl \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists
+  
 RUN R -e "install.packages('dplyr')"
 Run R -e "install.packages('leaflet')"
 Run R -e "install.packages('httr')"
 Run R -e "install.packages('htmlwidgets')"
 Run R -e "install.packages('tigris')"
 Run R -e "install.packages('sf')"
-
+Run R -e "install.packages('devtools')"
 # add missing packages here
 COPY . /app
 CMD ["/app/api.R"]

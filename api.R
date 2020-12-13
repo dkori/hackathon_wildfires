@@ -14,9 +14,29 @@ options(tigris_use_cache = TRUE)
 #set path variable for pandocs
 Sys.setenv(RSTUDIO_PANDOC="/opt/pandoc")
 #print(rmarkdown::pandoc_available())
-ca_shapefile<-states(cb=TRUE)%>%
-  filter(NAME == "California")%>%
-  st_transform("+init=EPSG:4326")
+
+# download and save the shapefile for ca
+# ca_shapefile<-states(cb=TRUE)%>%
+#   filter(NAME == "California")%>%
+#   st_transform("+init=EPSG:4326")
+# save(ca_shapefile,file = "ca_shape.Rdata")
+
+load("ca_shape.Rdata")
+
+# download latest available wildfire info
+wildfire_zip_url<-"https://opendata.arcgis.com/datasets/f72ebe741e3b4f0db376b4e765728339_0.zip?outSR=%7B%22latestWkid%22%3A4326%2C%22wkid%22%3A4326%7D"
+# create tempfile
+temp <- tempfile()
+#store shelter zip in tempfile
+download.file(wildfire_zip_url,temp)
+# store the names of all the files in the zip
+file_names<-unzip(temp,list=TRUE)["Name"]
+#unzip all files
+temp2<-unzip(temp,files = file_names$Name)
+
+unlink(temp)
+
+
 # current_fires<-read_sf(unzip("wildfire_Perimeters-shp.zip",files="Public_NIFS_Perimeters.shp"),
 #                        crs="+init=EPSG:4326")%>%
 current_fires<-read_sf("Public_NIFS_Perimeters.shp",
@@ -28,6 +48,26 @@ current_fires<-read_sf("Public_NIFS_Perimeters.shp",
   #slice(1:30)%>%
   # create an ID column for each wildfire
   mutate(fire_id = row_number())
+
+
+# download shelters
+shelter_zip_url<-"https://opendata.arcgis.com/datasets/d000037396514f70a2ba3683e037caee_0.zip"
+# create tempfile
+temp <- tempfile()
+#store shelter zip in tempfile
+download.file(shelter_zip_url,temp)
+#unzip all files
+temp2<-unzip(temp,files = c("National_Shelter_System_-_Open_Shelters.shx",
+                            "National_Shelter_System_-_Open_Shelters.dbf",
+                            "National_Shelter_System_-_Open_Shelters.shp",
+                            "National_Shelter_System_-_Open_Shelters.cpg",
+                            "National_Shelter_System_-_Open_Shelters.prj"))
+
+shelter_data <- read_sf("National_Shelter_System_-_Open_Shelters.shp")%>%
+  st_transform(crs="+init=EPSG:4326")
+
+unlink(temp)
+
 #* @get /add
 add <- function(x, y){
   return(as.numeric(x) + as.numeric(y))
@@ -208,7 +248,7 @@ map_wildfire<-function(lat,lon,return_map_image=TRUE,demo_map=FALSE){
   }
   
 
-  if(return_map_image==TRUE & fire_match$severity<4){
+  if(return_map_image==TRUE & severe_match$severity<4){
     leaflet_map<-leaflet()%>%
       # set the zoom
       setView(lng=lon,lat,zoom=9)%>%
@@ -244,3 +284,7 @@ map_wildfire<-function(lat,lon,return_map_image=TRUE,demo_map=FALSE){
   return(result)
 }
 
+#* @get /find_shelter
+find_shelter<-function(lat,lon){
+  
+}

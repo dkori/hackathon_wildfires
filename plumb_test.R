@@ -18,4 +18,4 @@ library(tigris)
 #   mutate(fire_id = n())
 
 rest <- plumb("api.R")
-rest$run(port=8060)
+rest$run(port=8000)

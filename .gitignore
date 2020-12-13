@@ -2,3 +2,11 @@
 .Rhistory
 .RData
 .Ruserdata
+*.zip
+*.dbf
+*.shp
+*.cpg
+*.shx
+*.prj
+Public_NIFS_Perimeters.shp
+Public_NIFS_Perimeters.shx

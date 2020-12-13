@@ -33,6 +33,9 @@ RUN apt-get update \
     zlib1g \
     pandoc 
 
+RUN installGithub.r r-spatial/mapview \
+&& rm -rf /tmp/downloaded_packages/
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
@@ -53,6 +56,7 @@ Run R -e "install.packages('httr')"
 Run R -e "install.packages('htmlwidgets')"
 Run R -e "install.packages('tigris')"
 Run R -e "install.packages('sf')"
+Run R -e "install.packages('tidyr')"
 Run R -e "install.packages('devtools')"
 # add missing packages here
 COPY . /app

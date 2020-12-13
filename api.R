@@ -185,8 +185,9 @@ check_wildfires<-function(lat,lon){
       unlist()
       
     result= list("severity" = severe_match$severity,
-                 "tts" = gsub('%direction%',nearest_fire_direction,severe_match$tts)
-                 #"fire_geography" = fire_geo_info
+                 "tts" = gsub('%direction%',nearest_fire_direction,severe_match$tts),
+                 "direction" = nearest_fire_direction
+                 
                  )
   }
   return(result)

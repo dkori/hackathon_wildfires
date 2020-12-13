@@ -80,7 +80,7 @@ user_location<-function(lat=1,lon=2){
   return(paste0("Your location is: ",lat,", ",lon," ",Sys.time()))
 }
 #* @serializer unboxedJSON
-#* @get /check_wildfire
+#* @get /check_wildfires
 check_wildfires<-function(lat,lon){
   # create a spatial dataframe out of the user's location
   user_spatial<-data.frame(lat=lat,lon=lon)%>%

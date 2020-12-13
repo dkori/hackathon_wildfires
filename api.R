@@ -64,7 +64,7 @@ temp2<-unzip(temp,files = c("National_Shelter_System_-_Open_Shelters.shx",
                             "National_Shelter_System_-_Open_Shelters.prj"))
 
 shelter_data <- read_sf("National_Shelter_System_-_Open_Shelters.shp")%>%
-  st_transform(crs="+init=EPSG:4326")
+  st_transform(crs="+init=EPSG:2163")
 
 unlink(temp)
 
@@ -81,7 +81,7 @@ user_location<-function(lat=1,lon=2){
 }
 #* @serializer unboxedJSON
 #* @get /check_wildfire
-check_wildfires<-function(lat,lon,return_map_image=FALSE,demo_map=TRUE){
+check_wildfires<-function(lat,lon){
   # create a spatial dataframe out of the user's location
   user_spatial<-data.frame(lat=lat,lon=lon)%>%
     st_as_sf(coords=c("lon","lat"),
@@ -286,5 +286,18 @@ map_wildfire<-function(lat,lon,return_map_image=TRUE,demo_map=FALSE){
 
 #* @get /find_shelter
 find_shelter<-function(lat,lon){
+  # make user coordinates into spatial frame, 2163
+  user_spatial<-data.frame(lat=lat,lon=lon)%>%
+    st_as_sf(coords=c("lon","lat"),
+             crs="+init=EPSG:2163")
+  # find the nearest shelter
+  nearest_shelter<-user_spatial%>%
+    st_join(shelter_data,
+          join = st_nearest_feature)%>%
+    # make dataframe
+    as.data.frame()%>%
+    # select relevant columns
+    select(SHELTER_NA, ADDRESS, CITY, STATE, ZIP, SHELTER_ST)
+  return(nearest_shelter)
   
 }

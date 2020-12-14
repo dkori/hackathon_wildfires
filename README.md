@@ -16,3 +16,5 @@ plumb_test.R executes the code for local testing pre-docker
 
 "development code.R" was my sandbox for developing the code
 
+The code for the Alexa Skill, written by Klaus Goffart, is located in the "skill code" directory
+

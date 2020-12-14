@@ -10,6 +10,8 @@ We use a docker container running R to deploy REST APIs that our Alexa skill cal
 + map_wildfires - endpoints: lat, lon, demo_map. Returns a png image of a map of all fires within the user's risk zone. Set demo_map=FALSE to make this feature live
 + find_shelters - endpoints: lat, lon. Returns the name, address, and status of the nearest shelter to the user's location. 
 
+api.R contains the functions that generate the REST APIs
+
 plumb_test.R executes the code for local testing pre-docker
 
 "development code.R" was my sandbox for developing the code

@@ -1,0 +1,151 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "wild fire",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "WhereIsFire",
+          "slots": [],
+          "samples": [
+            "is there a wildfire nearby",
+            "where is the wildfire",
+            "where is the closest wildfire",
+            "is there a fire near me",
+            "where is the fire",
+            "am I close to fire",
+            "Is there a wildfire around",
+            "Is there fire around",
+            "Where is the closest fire",
+            "Where is the next fire",
+            "Where is fire"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "SetStatus",
+          "slots": [
+            {
+              "name": "status",
+              "type": "status"
+            }
+          ],
+          "samples": [
+            "Status {status}",
+            "Set to {status}",
+            "Set status to {status}"
+          ]
+        },
+        {
+          "name": "GetWildfireShelter",
+          "slots": [],
+          "samples": [
+            "where can I go",
+            "what wildfire shelter should I go to",
+            "is there a shelter close",
+            "is there a wildfireshelter close",
+            "Where is shelter",
+            "Where is a wildfire shelter",
+            "Where is the next shelter"
+          ]
+        },
+        {
+          "name": "TakeMeToWildfireShelter",
+          "slots": [],
+          "samples": [
+            "lets go to the wildfire shelter",
+            "bring me there",
+            "how do I get to the wildfire shelter",
+            "Start navigation to the shelter",
+            "Take me the closest wildfire shelter",
+            "Take me to a shelter",
+            "Take me there"
+          ]
+        },
+        {
+          "name": "getDirections",
+          "slots": [],
+          "samples": [
+            "give me directions"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "live",
+                "synonyms": [
+                  "real",
+                  "up to date",
+                  "current",
+                  "life",
+                  "live"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "safe",
+                "synonyms": [
+                  "all clear",
+                  "all safe",
+                  "no fire"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "prepare",
+                "synonyms": [
+                  "get ready"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "leave"
+              }
+            },
+            {
+              "name": {
+                "value": "evacuate",
+                "synonyms": [
+                  "evacuate immediately",
+                  "evacuate",
+                  "fire"
+                ]
+              }
+            }
+          ],
+          "name": "status"
+        }
+      ],
+      "modelConfiguration": {
+        "fallbackIntentSensitivity": {
+          "level": "LOW"
+        }
+      }
+    }
+  },
+  "version": "13"
+}

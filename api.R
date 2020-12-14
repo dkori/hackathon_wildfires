@@ -24,7 +24,7 @@ Sys.setenv(RSTUDIO_PANDOC="/opt/pandoc")
 load("ca_shape.Rdata")
 
 # download latest available wildfire info
-wildfire_zip_url<-"https://opendata.arcgis.com/datasets/f72ebe741e3b4f0db376b4e765728339_0.zip?outSR=%7B%22latestWkid%22%3A4326%2C%22wkid%22%3A4326%7D"
+wildfire_zip_url<-"https://opendata.arcgis.com/datasets/f72ebe741e3b4f0db376b4e765728339_0.zip"
 # create tempfile
 temp <- tempfile()
 #store shelter zip in tempfile

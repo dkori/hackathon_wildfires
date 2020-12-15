@@ -11,9 +11,10 @@ We use a docker container running R to deploy REST APIs that our Alexa skill cal
 + find_shelters - endpoints: lat, lon. Returns the name, address, and status of the nearest shelter to the user's location. 
 
 **Sample API Calls - update lat and lon to see how the responses vary**
-+ [check_wildfire](http://apis.alexa-hackathon-wildfire.com/check_wildfires?lat=37.3631653&lon=-121.0027421)
-+ [map wildfire](http://apis.alexa-hackathon-wildfire.com/map_wildfire?lat=37.3631653&lon=-121.0027421)
++ [check_wildfires 1](http://apis.alexa-hackathon-wildfire.com/check_wildfires?lat=37.3631653&lon=-121.0027421), [check_wildfires 2](http://apis.alexa-hackathon-wildfire.com/check_wildfires?lat=35.3631653&lon=-122.0027421)
++ [map wildfire](http://apis.alexa-hackathon-wildfire.com/map_wildfire?lat=37.3631653&lon=-121.0027421), [map_wildfires_2](http://apis.alexa-hackathon-wildfire.com/map_wildfire?lat=35.3631653&lon=-122.0027421)
 + [find_shelters](http://apis.alexa-hackathon-wildfire.com/find_shelter?lat=37.3631653&lon=-121.0027421)
+
 api.R contains the functions that generate the REST APIs
 
 plumb_test.R executes the code for local testing pre-docker
